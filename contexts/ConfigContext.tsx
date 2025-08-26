@@ -26,7 +26,7 @@ const defaultConfig: StoreConfig = {
       delay: 3000,
       position: 'center',
       buttonText: 'Entendido',
-      buttonAction: 'close'
+      buttonAction: 'close'      
     }
   ]
 };

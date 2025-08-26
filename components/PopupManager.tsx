@@ -73,26 +73,17 @@ export default function PopupManager() {
       case 'success':
         return <CheckCircle className="h-6 w-6 text-green-500" />;
       case 'promotion':
-        return <Gift className="h-6 w-6 text-purple-500" />;
+        return <Gift className="h-6 w-6 text-white" />;
       default:
         return <Info className="h-6 w-6 text-blue-500" />;
     }
   };
 
-  const getTypeStyles = (type: PopupConfig['type']) => {
-    switch (type) {
-      case 'info':
-        return 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20';
-      case 'warning':
-        return 'border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20';
-      case 'success':
-        return 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20';
-      case 'promotion':
-        return 'border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20';
-      default:
-        return 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800';
-    }
+  const getTypeStyles = (_type: PopupConfig['type']) => {
+    // Ignoramos el type, siempre blanco/negro
+    return 'bg-white text-black border border-gray-300';
   };
+  
 
   const getPositionStyles = (position: PopupConfig['position']) => {
     switch (position) {
@@ -110,40 +101,38 @@ export default function PopupManager() {
   if (!isClient || !activePopup) return null;
 
   return (
-    <div className={`popup-overlay ${getPositionStyles(activePopup.position)} animate-fade-in`}>
-      <div className={`popup-content border-2 ${getTypeStyles(activePopup.type)} animate-fade-in-up`}>
-        <div className="popup-header">
-          <div className="flex items-center space-x-3">
-            {getIcon(activePopup.type)}
-            <h3 className="popup-title">{activePopup.title}</h3>
-          </div>
-          <button
-            onClick={handleClose}
-            className="popup-close"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <div className="popup-overlay items-center animate-fade-in">
+    <div className="popup-content border-2 bg-white text-black border-gray-300 animate-fade-in-up">
+      <div className="popup-header">
+        <div className="flex items-center space-x-3">
+          {getIcon(activePopup.type)}
+          <h3 className="popup-title">{activePopup.title}</h3>
         </div>
-        
-        <div className="popup-body">
-          <div dangerouslySetInnerHTML={{ __html: activePopup.content }} />
-        </div>
-        
-        <div className="popup-actions">
-          <button
-            onClick={handleClose}
-            className="btn-secondary px-4 py-2"
-          >
-            Cerrar
-          </button>
-          <button
-            onClick={handleAction}
-            className="btn-primary px-4 py-2"
-          >
-            {activePopup.buttonText}
-          </button>
-        </div>
+        <button onClick={handleClose} className="popup-close">
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+  
+      <div className="popup-body">
+        <div dangerouslySetInnerHTML={{ __html: activePopup.content }} />
+      </div>
+  
+      <div className="popup-actions">
+        <button
+          onClick={handleClose}
+          className="btn-secondary px-4 py-2 bg-gray-200 text-black"
+        >
+          Cerrar
+        </button>
+        <button
+          onClick={handleAction}
+          className="px-4 py-2 bg-blue-600 text-black dark:text-white hover:bg-gray-500"
+        >
+          {activePopup.buttonText}
+        </button>
       </div>
     </div>
+  </div>
+  
   );
 }
