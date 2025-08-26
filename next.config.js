@@ -12,11 +12,7 @@ const nextConfig = {
     unoptimized: true,
     domains: ['localhost', 'via.placeholder.com', 'picsum.photos']
   },
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['jsonwebtoken'],
-  },
-  env: {
+    env: {
     CUSTOM_KEY: 'my-value',
   },
 };
