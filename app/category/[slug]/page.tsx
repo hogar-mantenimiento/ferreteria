@@ -1,17 +1,14 @@
+// app/category/[slug]/page.tsx
 import CategoryServerWrapper from './category-server-wrapper';
 
+// Forzamos render dinámico (evita SSG/ISR y los errores por APIs/cookies en build)
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+// Mientras no tengas una fuente de datos accesible en build, no generamos rutas estáticas.
+// Esto evita el fetch a localhost/VERCEL_URL durante el build.
 export async function generateStaticParams() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/categories`);
-    const data = await response.json();
-    
-    return data.categories?.map((category: any) => ({
-      slug: category.slug,
-    })) || [];
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
+  return [];
 }
 
 interface PageProps {
