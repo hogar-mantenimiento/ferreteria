@@ -1,0 +1,34 @@
+{
+  "storeName": "FGP",
+  "primaryColor": "#204a87",
+  "secondaryColor": "#c4a000",
+  "accentColor": "#2e3436",
+  "logo": "",
+  "popups": [
+    {
+      "id": "welcome",
+      "title": "¡Bienvenido a nuestra tienda!",
+      "content": "<p>Descubre las mejores ofertas en herramientas y ferretería. <strong>¡Envío gratis en compras superiores a $50.000!</strong></p>",
+      "type": "promotion",
+      "enabled": true,
+      "showOnce": true,
+      "delay": 2000,
+      "position": "center",
+      "buttonText": "Ver Ofertas",
+      "buttonAction": "redirect",
+      "redirectUrl": "/ofertas"
+    },
+    {
+      "id": "newsletter",
+      "title": "Suscríbete a nuestro newsletter",
+      "content": "<p>Recibe las mejores ofertas y novedades directamente en tu email. <em>¡No te pierdas ninguna promoción!</em></p>",
+      "type": "info",
+      "enabled": false,
+      "showOnce": true,
+      "delay": 10000,
+      "position": "bottom",
+      "buttonText": "Suscribirse",
+      "buttonAction": "close"
+    }
+  ]
+}

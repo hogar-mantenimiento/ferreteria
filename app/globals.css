@@ -1,0 +1,394 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* MercadoLibre inspired colors */
+  --color-primary-50: 255, 248, 225;
+  --color-primary-100: 255, 236, 179;
+  --color-primary-200: 255, 224, 130;
+  --color-primary-300: 255, 213, 79;
+  --color-primary-400: 255, 202, 40;
+  --color-primary-500: 255, 193, 7;
+  --color-primary-600: 251, 192, 45;
+  --color-primary-700: 245, 166, 35;
+  --color-primary-800: 239, 108, 0;
+  --color-primary-900: 230, 81, 0;
+
+  --color-secondary-50: 232, 245, 233;
+  --color-secondary-100: 200, 230, 201;
+  --color-secondary-200: 165, 214, 167;
+  --color-secondary-300: 129, 199, 132;
+  --color-secondary-400: 102, 187, 106;
+  --color-secondary-500: 76, 175, 80;
+  --color-secondary-600: 67, 160, 71;
+  --color-secondary-700: 56, 142, 60;
+  --color-secondary-800: 46, 125, 50;
+  --color-secondary-900: 27, 94, 32;
+
+  --color-accent-50: 227, 242, 253;
+  --color-accent-100: 187, 222, 251;
+  --color-accent-200: 144, 202, 249;
+  --color-accent-300: 100, 181, 246;
+  --color-accent-400: 66, 165, 245;
+  --color-accent-500: 33, 150, 243;
+  --color-accent-600: 30, 136, 229;
+  --color-accent-700: 25, 118, 210;
+  --color-accent-800: 21, 101, 192;
+  --color-accent-900: 13, 71, 161;
+
+  /* Shadcn/ui variables */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 47 96% 53%;
+  --primary-foreground: 26 83% 14%;
+  --secondary: 210 40% 98%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 47 96% 53%;
+  --radius: 0.5rem;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 47 96% 53%;
+  --primary-foreground: 26 83% 14%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 47 96% 53%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+
+  /* Ensure proper text colors in both modes */
+  .text-readable {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+
+  .text-readable-muted {
+    @apply text-gray-600 dark:text-gray-300;
+  }
+
+  .text-readable-light {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 hover:shadow-md;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-500 text-gray-900 hover:bg-primary-600 focus:ring-primary-500 font-semibold;
+  }
+  
+  .btn-secondary {
+    @apply bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-gray-500 shadow-sm;
+  }
+  
+  .btn-accent {
+    @apply bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-500;
+  }
+  
+  .input {
+    @apply block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-500 dark:placeholder-gray-400 transition-colors;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow;
+  }
+
+  /* MercadoLibre inspired styles */
+  .ml-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1;
+  }
+
+  .ml-button {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .ml-button-primary {
+    @apply ml-button bg-primary-500 text-gray-900 hover:bg-primary-600 focus:ring-primary-500;
+  }
+
+  .ml-button-secondary {
+    @apply ml-button bg-transparent text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 focus:ring-primary-500;
+  }
+
+  .ml-input {
+    @apply block w-full px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors;
+  }
+
+  /* Hero section text fix */
+  .hero-section {
+    @apply bg-gradient-to-r from-primary-600 to-primary-800;
+    color: white !important;
+  }
+
+  .hero-section *,
+  .hero-section h1, 
+  .hero-section h2, 
+  .hero-section h3, 
+  .hero-section p, 
+  .hero-section span,
+  .hero-section div {
+    color: white !important;
+  }
+
+  .hero-section .btn {
+    color: #1f2937 !important; /* Dark text for buttons */
+  }
+
+  .hero-section .btn:hover {
+    color: #111827 !important;
+  }
+
+  /* MercadoLibre color scheme */
+  .ml-yellow { @apply bg-primary-500; }
+  .ml-blue { @apply bg-accent-500; }
+  .ml-green { @apply bg-secondary-500; }
+  
+  /* Product grid styles */
+  .product-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4;
+  }
+
+  /* Category styles */
+  .category-card {
+    @apply ml-card p-4 text-center hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer;
+  }
+
+  /* Search bar styles */
+  .search-bar {
+    @apply flex items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:shadow-md transition-shadow;
+  }
+
+  /* Price styles */
+  .price-current {
+    @apply text-2xl font-bold text-gray-900 dark:text-gray-100;
+  }
+
+  .price-original {
+    @apply text-sm text-gray-500 dark:text-gray-400 line-through;
+  }
+
+  .price-discount {
+    @apply text-sm text-green-600 dark:text-green-400 font-semibold;
+  }
+
+  /* Popup styles */
+  .popup-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+
+  .popup-content {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 text-gray-900 dark:text-gray-100;
+  }
+
+  .popup-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .popup-title {
+    @apply text-xl font-bold text-gray-900 dark:text-gray-100;
+  }
+
+  .popup-close {
+    @apply text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors;
+  }
+
+  .popup-body {
+    @apply text-gray-600 dark:text-gray-300 mb-6;
+  }
+
+  .popup-actions {
+    @apply flex justify-end space-x-3;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* MercadoLibre animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .product-grid {
+    @apply grid-cols-2 gap-2;
+  }
+}
+
+/* Fix for text readability in all components */
+.text-primary {
+  @apply text-primary-600 dark:text-primary-400 !important;
+}
+
+.text-secondary {
+  @apply text-secondary-600 dark:text-secondary-400 !important;
+}
+
+.text-accent {
+  @apply text-accent-600 dark:text-accent-400 !important;
+}
+
+/* Ensure all text is readable */
+h1, h2, h3, h4, h5, h6 {
+  @apply text-gray-900 dark:text-gray-100 !important;
+}
+
+p {
+  @apply text-gray-600 dark:text-gray-300 !important;
+}
+
+span {
+  @apply text-gray-700 dark:text-gray-200 !important;
+}
+
+/* Form elements */
+label {
+  @apply text-gray-700 dark:text-gray-200 !important;
+}
+
+/* Links */
+a {
+  @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 !important;
+}
+
+/* Button text colors */
+.btn-primary {
+  color: #1f2937 !important; /* Dark text on yellow background */
+}
+
+.btn-secondary {
+  @apply text-gray-700 dark:text-gray-200 !important;
+}
+
+.btn-accent {
+  @apply text-white !important;
+}
+
+/* Specific fixes for common elements */
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
+  @apply text-gray-900 dark:text-gray-100 !important;
+}
+
+.card p, .card span, .card div {
+  @apply text-gray-600 dark:text-gray-300 !important;
+}
+
+/* Navigation text */
+nav a, nav button, nav span {
+  @apply text-gray-700 dark:text-gray-300 !important;
+}
+
+/* Ensure readability classes work */
+.text-readable {
+  @apply text-gray-900 dark:text-gray-100 !important;
+}
+
+.text-readable-muted {
+  @apply text-gray-600 dark:text-gray-300 !important;
+}
+
+.text-readable-light {
+  @apply text-gray-500 dark:text-gray-400 !important;
+}
