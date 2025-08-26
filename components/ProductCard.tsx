@@ -130,7 +130,7 @@ export default function ProductCard({ product, onAddToCart, viewMode = 'grid' }:
           </span>
           <span className={`px-2 py-1 rounded-full text-xs ${
             product.stock > 0 
-              ? 'bg-green-100 text-green-800'
+              ? 'bg-green-100 text-green-800 dark:bg-green-800'
               : 'bg-red-100 text-red-800'
           }`}>
             {product.stock > 0 ? `${product.stock} disponibles` : 'Sin stock'}
@@ -140,7 +140,7 @@ export default function ProductCard({ product, onAddToCart, viewMode = 'grid' }:
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || isLoading}
-          className="ml-button-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          className="ml-button-primary bg-gray-900 dark:bg-slate-100 w-full disabled:opacity-50 disabled:cursor-not-allowed text-gray-50 dark:text-gray-900 hover:bg-gray-700"
         >
           <ShoppingCart className="h-4 w-4 mr-2" />
           {isLoading ? 'Agregando...' : 'Agregar al Carrito'}

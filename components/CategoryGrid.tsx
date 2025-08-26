@@ -16,28 +16,58 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
       {categories.map((category) => (
         <div
           key={category.id}
-          className="card group hover:shadow-lg transition-shadow cursor-pointer animate-fade-in"
+          role="button"
+          tabIndex={0}
+          aria-label={`Ver categoría ${category.name}`}
           onClick={() => router.push(`/category/${category.slug}`)}
+          onKeyDown={(e) =>
+            (e.key === 'Enter' || e.key === ' ') &&
+            router.push(`/category/${category.slug}`)
+          }
+          className={`
+            group relative overflow-hidden rounded-xl border
+            border-gray-200 dark:border-gray-800
+            bg-white dark:bg-gray-900
+            shadow-sm hover:shadow-md transition-all
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+            focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400
+            focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900
+            cursor-pointer animate-fade-in
+          `}
         >
-          <div className="relative overflow-hidden">
-            <img
-              src={category.image}
-              alt={category.name}
-              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 text-white">
-              <h3 className="text-xl font-bold mb-2">{category.name}</h3>
-              <p className="text-sm opacity-90 mb-3">{category.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">
-                  {category.productCount} productos
+          {/* Imagen */}
+          <img
+            src={category.image}
+            alt={category.name}
+            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+
+          {/* Overlay (debajo) */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
+
+          {/* Contenido (encima) */}
+          <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5 text-white">
+            <h3 className="text-lg sm:text-xl font-bold mb-1.5 line-clamp-1 text-white">
+              {category.name}
+            </h3>
+
+            {category.description ? (
+              <p className="text-sm/5 line-clamp-2 mb-3 text-white">
+                {category.description}
+              </p>
+            ) : null}
+
+            <div className="flex items-center justify-between text-sm text-white">
+              <span className="text-white">
+                {category.productCount} productos
+              </span>
+              <span className="inline-flex items-center gap-1 transition-transform group-hover:translate-x-1 text-white">
+                <span className="underline underline-offset-2 decoration-white/60">
+                  Ver más
                 </span>
-                <div className="flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
-                  <span className="text-sm">Ver más</span>
-                  <ArrowRight className="h-4 w-4" />
-                </div>
-              </div>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
             </div>
           </div>
         </div>
