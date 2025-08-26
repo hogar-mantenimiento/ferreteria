@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useConfig } from '@/hooks/useConfig';
 import AdminLayout from '@/components/AdminLayout';
-import { Upload, Palette, Save, Plus, Trash2, Edit } from 'lucide-react';
+import { Upload, Palette, Save, Plus, Trash2, Edit, X } from 'lucide-react';
 import { PopupConfig } from '@/types';
 import toast from 'react-hot-toast';
 

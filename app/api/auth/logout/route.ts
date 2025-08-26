@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const COOKIE_NAME = 'token';
+
 export async function POST(request: NextRequest) {
   try {
-    const response = NextResponse.json({ message: 'Logged out successfully' });
-    
-    response.cookies.set('token', '', {
+    const res = NextResponse.json({ ok: true });
+    res.cookies.set(COOKIE_NAME, '', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      expires: new Date(0),
-      path: '/'
+      path: '/',
+      maxAge: 0,
     });
-
-    return response;
-  } catch (error) {
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 }
-    );
+    return res;
+  } catch {
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

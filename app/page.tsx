@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
@@ -13,13 +13,15 @@ import CategoryGrid from '@/components/CategoryGrid';
 import Sidebar from '@/components/Sidebar';
 import AdBanner from '@/components/AdBanner';
 import PromotionCard from '@/components/PromotionCard';
-import { Product, Category } from '@/types';
+import type { Product, Category } from '@/types';
 import { Menu, Zap, Shield, Truck, CreditCard, Star, TrendingUp } from 'lucide-react';
 
 export default function HomePage() {
+  const router = useRouter();
   const { user } = useAuth();
   const { addToCart } = useCart();
   const { config } = useConfig();
+
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -32,14 +34,12 @@ export default function HomePage() {
 
   const fetchHomeData = async () => {
     try {
-      // Fetch all products
       const productsRes = await fetch('/api/products');
       const productsData = await productsRes.json();
-      const products = productsData.products || [];
+      const products: Product[] = productsData.products || [];
       setAllProducts(products);
-      setFeaturedProducts(products.filter((p: Product) => p.featured));
+      setFeaturedProducts(products.filter((p: Product) => (p as any)?.featured));
 
-      // Fetch categories
       const categoriesRes = await fetch('/api/categories');
       const categoriesData = await categoriesRes.json();
       setCategories(categoriesData.categories || []);
@@ -82,99 +82,105 @@ export default function HomePage() {
   ];
 
   const features = [
-    {
-      icon: Truck,
-      title: 'Envío Gratis',
-      description: 'En compras superiores a $50.000'
-    },
-    {
-      icon: Shield,
-      title: 'Garantía Extendida',
-      description: 'Hasta 2 años en productos seleccionados'
-    },
-    {
-      icon: CreditCard,
-      title: 'Financiación',
-      description: 'Hasta 12 cuotas sin interés'
-    },
-    {
-      icon: Zap,
-      title: 'Entrega Rápida',
-      description: 'Recibí tu pedido en 24-48hs'
-    }
+    { icon: Truck, title: 'Envío Gratis', description: 'En compras superiores a $50.000' },
+    { icon: Shield, title: 'Garantía Extendida', description: 'Hasta 2 años en productos seleccionados' },
+    { icon: CreditCard, title: 'Financiación', description: 'Hasta 12 cuotas sin interés' },
+    { icon: Zap, title: 'Entrega Rápida', description: 'Recibí tu pedido en 24-48hs' }
   ];
 
-  // Get random products for different sections
+  // Helpers de productos (memo para no recalcular en cada render)
   const getRandomProducts = (count: number, exclude: string[] = []) => {
-    return allProducts
-      .filter(p => !exclude.includes(p.id))
-      .sort(() => Math.random() - 0.5)
-      .slice(0, count);
+    const pool = allProducts.filter(p => !exclude.includes(String((p as any).id)));
+    return [...pool].sort(() => Math.random() - 0.5).slice(0, count);
   };
 
-  const bestSellers = getRandomProducts(4);
-  const newArrivals = getRandomProducts(4, bestSellers.map(p => p.id));
-  const recommendations = getRandomProducts(6, [...bestSellers.map(p => p.id), ...newArrivals.map(p => p.id)]);
+  const bestSellers = useMemo(() => getRandomProducts(4), [allProducts]);
+  const newArrivals = useMemo(
+    () => getRandomProducts(4, bestSellers.map(p => String((p as any).id))),
+    [allProducts, bestSellers]
+  );
+  const recommendations = useMemo(
+    () =>
+      getRandomProducts(
+        6,
+        [...bestSellers, ...newArrivals].map(p => String((p as any).id))
+      ),
+    [allProducts, bestSellers, newArrivals]
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+      {/* Header y Nav respetan tema si internamente usan colores neutrales o `dark:` */}
       <Header />
-      
-      {/* Navigation Bar */}
       <Navbar />
-      
-      {/* Ad Banner */}
+
       <AdBanner />
-      
-      {/* Floating Sidebar Button */}
+
+      {/* Botón flotante para abrir Sidebar */}
       <button
         onClick={() => setIsSidebarOpen(true)}
-        className="fixed top-1/2 right-0 transform -translate-y-1/2 bg-primary-600 text-white p-3 rounded-l-lg shadow-lg hover:bg-primary-700 transition-colors z-30"
+        aria-label="Abrir menú lateral"
+        className="fixed top-1/2 right-0 -translate-y-1/2 bg-blue-600 text-white p-3 rounded-l-lg shadow-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors z-30"
       >
         <Menu className="h-6 w-6" />
       </button>
 
-      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
+
       <main>
-        {/* Hero Section */}
-        <section className="hero-section relative overflow-hidden">
-          {/* Background overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-800"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-            <div className="relative z-10 text-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-                Bienvenido a {config.storeName}
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 opacity-90 text-white">
-                Encuentra todo lo que necesitas para tus proyectos
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="btn btn-accent text-lg px-8 py-3 text-white bg-accent-600 hover:bg-accent-700">
-                  Explorar Productos
-                </button>
-                <button className="btn bg-white bg-opacity-20 hover:bg-opacity-30 border-white border-opacity-30 text-lg px-8 py-3 text-white border-2">
-                  Ver Ofertas
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-white dark:bg-gray-900 transition-colors min-h-screen flex items-center">
+  <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div className="text-center">
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+        Bienvenido a {config?.storeName ?? 'Nuestra Tienda'}
+      </h1>
+      <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+        Encuentra todo lo que necesitas para tus proyectos
+      </p>
+
+      {/* Botones */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+        {/* Botón primario */}
+        <button
+          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-gray-900 hover:bg-gray-100 
+          dark:border-gray-600 dark:text-white dark:hover:bg-gray-800
+          focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          onClick={() => router.push('/productos')}
+        >
+          Explorar Productos
+        </button>
+
+        {/* Botón secundario */}
+        <button
+          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-gray-900 hover:bg-gray-100 
+                     dark:border-gray-600 dark:text-white dark:hover:bg-gray-800
+                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          onClick={() => router.push('/ofertas')}
+        >
+          Ver Ofertas
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
         {/* Features */}
-        <section className="py-12 bg-white dark:bg-gray-800">
+        <section className="py-12 bg-white dark:bg-gray-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((feature, index) => (
-                <div key={index} className="text-center p-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 text-primary-600 rounded-full mb-4">
+                <div
+                  key={index}
+                  className="text-center p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+                >
+                  <div className="mx-auto mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                     <feature.icon className="h-8 w-8" />
                   </div>
-                  <h3 className="text-lg font-semibold text-readable mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-readable-muted">
+                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
                     {feature.description}
                   </p>
                 </div>
@@ -183,42 +189,41 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Promotions */}
-        <section className="py-16">
+        {/* Promociones */}
+        <section className="py-16 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-readable mb-4">
-                🔥 Promociones Especiales
-              </h2>
-              <p className="text-readable-muted max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-3">🔥 Promociones Especiales</h2>
+              <p className="text-gray-600 dark:text-gray-300">
                 No te pierdas estas increíbles ofertas por tiempo limitado
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {promotions.map((promotion) => (
-                <PromotionCard key={promotion.id} promotion={promotion} />
+              {promotions.map(promo => (
+                <PromotionCard key={promo.id} promotion={promo} />
               ))}
             </div>
           </div>
         </section>
 
-        {/* Categories Section */}
-        <section className="py-16 bg-white dark:bg-gray-800">
+        {/* Categorías */}
+        <section className="py-16 bg-white dark:bg-gray-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Nuestras Categorías
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-3">Nuestras Categorías</h2>
+              <p className="text-gray-600 dark:text-gray-300">
                 Explora nuestra amplia gama de productos organizados por categorías
               </p>
             </div>
-            
+
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="card h-48 animate-pulse bg-gray-200 dark:bg-gray-700" />
+                  <div
+                    key={i}
+                    className="h-48 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700"
+                  />
                 ))}
               </div>
             ) : (
@@ -227,30 +232,36 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Best Sellers */}
-        <section className="py-16">
+        {/* Más vendidos */}
+        <section className="py-16 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-3">
-                <TrendingUp className="h-8 w-8 text-primary-600" />
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Más Vendidos
-                </h2>
+              <div className="flex items-center gap-3">
+                <TrendingUp className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <h2 className="text-3xl font-bold">Más Vendidos</h2>
               </div>
-              <button className="btn btn-secondary">Ver Todos</button>
+              <button
+                onClick={() => router.push('/mas-vendidos')}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Ver Todos
+              </button>
             </div>
-            
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="card h-80 animate-pulse bg-gray-200 dark:bg-gray-700" />
+                  <div
+                    key={i}
+                    className="h-80 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700"
+                  />
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {bestSellers.map((product) => (
+                {bestSellers.map(product => (
                   <ProductCard
-                    key={product.id}
+                    key={String((product as any).id)}
                     product={product}
                     onAddToCart={() => addToCart(product)}
                   />
@@ -260,30 +271,36 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Products Section */}
-        <section className="py-16 bg-white dark:bg-gray-800">
+        {/* Destacados */}
+        <section className="py-16 bg-white dark:bg-gray-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-3">
-                <Star className="h-8 w-8 text-yellow-500" />
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Productos Destacados
-                </h2>
+              <div className="flex items-center gap-3">
+                <Star className="h-8 w-8 text-yellow-500 dark:text-yellow-400" />
+                <h2 className="text-3xl font-bold">Productos Destacados</h2>
               </div>
-              <button className="btn btn-secondary">Ver Todos</button>
+              <button
+                onClick={() => router.push('/destacados')}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Ver Todos
+              </button>
             </div>
-            
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="card h-80 animate-pulse bg-gray-200 dark:bg-gray-700" />
+                  <div
+                    key={i}
+                    className="h-80 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700"
+                  />
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {featuredProducts.slice(0, 8).map((product) => (
+                {featuredProducts.slice(0, 8).map(product => (
                   <ProductCard
-                    key={product.id}
+                    key={String((product as any).id)}
                     product={product}
                     onAddToCart={() => addToCart(product)}
                   />
@@ -293,29 +310,30 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* New Arrivals */}
-        <section className="py-16">
+        {/* Nuevos */}
+        <section className="py-16 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                ✨ Nuevos Productos
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-3">✨ Nuevos Productos</h2>
+              <p className="text-gray-600 dark:text-gray-300">
                 Descubre las últimas incorporaciones a nuestro catálogo
               </p>
             </div>
-            
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="card h-80 animate-pulse bg-gray-200 dark:bg-gray-700" />
+                  <div
+                    key={i}
+                    className="h-80 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700"
+                  />
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {newArrivals.map((product) => (
+                {newArrivals.map(product => (
                   <ProductCard
-                    key={product.id}
+                    key={String((product as any).id)}
                     product={product}
                     onAddToCart={() => addToCart(product)}
                   />
@@ -325,29 +343,30 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Recommendations */}
-        <section className="py-16 bg-white dark:bg-gray-800">
+        {/* Recomendaciones */}
+        <section className="py-16 bg-white dark:bg-gray-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Recomendados para Ti
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-3">Recomendados para Ti</h2>
+              <p className="text-gray-600 dark:text-gray-300">
                 Productos seleccionados especialmente para tus proyectos
               </p>
             </div>
-            
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="card h-80 animate-pulse bg-gray-200 dark:bg-gray-700" />
+                  <div
+                    key={i}
+                    className="h-80 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-700"
+                  />
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recommendations.map((product) => (
+                {recommendations.map(product => (
                   <ProductCard
-                    key={product.id}
+                    key={String((product as any).id)}
                     product={product}
                     onAddToCart={() => addToCart(product)}
                   />
@@ -358,46 +377,47 @@ export default function HomePage() {
         </section>
 
         {/* Newsletter */}
-        <section className="py-16 bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+        <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 text-white transition-colors">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              ¡No te pierdas nuestras ofertas!
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
+            <h2 className="text-3xl font-bold mb-4">¡No te pierdas nuestras ofertas!</h2>
+            <p className="text-xl mb-8 text-white/90">
               Suscríbete a nuestro newsletter y recibe descuentos exclusivos
             </p>
             <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
               <input
                 type="email"
                 placeholder="Tu email"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white/70"
               />
-              <button className="btn btn-accent px-8 py-3">
+              <button
+                onClick={() => router.push('/newsletter')}
+                className="px-8 py-3 rounded-lg font-medium bg-white text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/70"
+              >
                 Suscribirse
               </button>
             </div>
           </div>
         </section>
 
-        {/* Seller CTA Section */}
-        <section className="py-16 bg-white dark:bg-gray-800">
+        {/* CTA Vendedor */}
+        <section className="py-16 bg-white dark:bg-gray-800 transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-white text-center">
+            <div className="rounded-2xl p-8 md:p-12 text-white text-center bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 ¿Querés ser parte de nuestro equipo?
               </h2>
-              <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-                Únete como vendedor preventista y accede a comisiones atractivas, 
+              <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
+                Únete como vendedor preventista y accede a comisiones atractivas,
                 capacitación continua y el respaldo de una empresa líder.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button
                   onClick={() => router.push('/vendedor')}
-                  className="btn bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
+                  className="px-8 py-3 text-lg font-semibold rounded-lg bg-white text-blue-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/70"
                 >
                   💼 Aplicar Ahora
                 </button>
-                <div className="text-sm opacity-80">
+                <div className="text-sm text-white/90">
                   ✅ Sin experiencia requerida • ✅ Capacitación incluida
                 </div>
               </div>

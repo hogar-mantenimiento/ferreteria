@@ -16,54 +16,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  useEffect(() => { checkAuth(); }, []);
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/api/auth/me', {
-        credentials: 'include'
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      }
-    } catch (error) {
-      console.error('Error checking auth:', error);
+      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      // ahora /me devuelve 200 con { user: null } si no hay sesión
+      const data = await res.json().catch(() => ({}));
+      setUser(data?.user ?? null);
+    } catch (err) {
+      console.error('Error checking auth:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('/api/auth/login', {
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
-      credentials: 'include'
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      setUser(data.user);
-    } else {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error en el login');
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data?.message || `Error en el login (${res.status})`);
     }
+    setUser(data.user);
   };
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include'
-      });
-    } catch (error) {
-      console.error('Error during logout:', error);
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch (err) {
+      console.error('Error during logout:', err);
     } finally {
       setUser(null);
     }
@@ -77,11 +64,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (ctx === undefined) throw new Error('useAuth must be used within an AuthProvider');
+  return ctx;
 }
 
 export { AuthContext };
