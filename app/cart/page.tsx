@@ -34,6 +34,7 @@ export default function CartPage() {
         body: JSON.stringify({
           items: items.map(item => ({
             id: item.product.id,
+            title: item.product.name,
             quantity: item.quantity,
             price: item.product.price,
           })),

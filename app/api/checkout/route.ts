@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import mercadopago from 'mercadopago';
+import { z } from 'zod';
 
 function verifyAuth(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
@@ -26,61 +28,74 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { items } = await request.json();
-    
-    if (!items || items.length === 0) {
+    const body = await request.json();
+
+    const itemSchema = z.object({
+      id: z.string(),
+      title: z.string(),
+      quantity: z.number().int().positive(),
+      price: z.number().positive(),
+    });
+
+    const checkoutSchema = z.object({
+      items: z.array(itemSchema).min(1, 'No items in cart'),
+    });
+
+    const { items } = checkoutSchema.parse(body);
+
+    if (!process.env.MERCADOPAGO_ACCESS_TOKEN) {
       return NextResponse.json(
-        { message: 'No items in cart' },
-        { status: 400 }
+        { message: 'MercadoPago access token not configured' },
+        { status: 500 }
       );
     }
 
-    // Calculate total
-    const total = items.reduce((sum: number, item: any) => 
-      sum + (item.price * item.quantity), 0
+    mercadopago.configure({
+      access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
+    });
+
+    const total = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
     );
 
-    // Mock MercadoPago integration
-    // In production, you would use the actual MercadoPago SDK
     const preference = {
-      items: items.map((item: any) => ({
+      items: items.map(item => ({
         id: item.id,
-        title: `Producto ${item.id}`,
+        title: item.title,
         unit_price: item.price,
         quantity: item.quantity,
-        currency_id: 'ARS'
+        currency_id: 'ARS',
       })),
       payer: {
-        email: auth.email
+        email: auth.email,
       },
       back_urls: {
         success: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
         failure: `${process.env.NEXT_PUBLIC_APP_URL}/failure`,
-        pending: `${process.env.NEXT_PUBLIC_APP_URL}/pending`
+        pending: `${process.env.NEXT_PUBLIC_APP_URL}/pending`,
       },
-      auto_return: 'approved'
+      notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/mercadopago/webhook`,
+      auto_return: 'approved',
     };
 
-    // Mock preference creation
-    const mockPreferenceId = `MP-${Date.now()}`;
-    const mockPreferenceUrl = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${mockPreferenceId}`;
-
-    // In production, you would save this order to database
-    console.log('Order created:', {
-      userId: auth.userId,
-      items,
-      total,
-      preferenceId: mockPreferenceId,
-      createdAt: new Date()
-    });
+    const preferenceResponse = await mercadopago.preferences.create(preference);
 
     return NextResponse.json({
-      preferenceId: mockPreferenceId,
-      preferenceUrl: mockPreferenceUrl,
-      total
+      preferenceId: preferenceResponse.body.id,
+      preferenceUrl:
+        preferenceResponse.body.init_point ||
+        preferenceResponse.body.sandbox_init_point,
+      total,
     });
   } catch (error) {
     console.error('Error creating checkout:', error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { message: 'Invalid request', errors: error.errors },
+        { status: 400 }
+      );
+    }
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

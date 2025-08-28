@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mercadopago from 'mercadopago';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,21 +13,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Mock payment status - In production, you would fetch from MercadoPago API
-    const mockPaymentData = {
-      id: paymentId,
-      status: 'approved',
-      transaction_amount: 85000,
-      currency_id: 'ARS',
-      payment_method_id: 'visa',
-      payer: {
-        email: 'customer@example.com'
-      },
-      date_created: new Date().toISOString(),
-      date_approved: new Date().toISOString()
-    };
+    if (!process.env.MERCADOPAGO_ACCESS_TOKEN) {
+      return NextResponse.json(
+        { message: 'MercadoPago access token not configured' },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json(mockPaymentData);
+    mercadopago.configure({
+      access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
+    });
+
+    const payment = await mercadopago.payment.findById(Number(paymentId));
+
+    return NextResponse.json(payment.body);
   } catch (error) {
     console.error('Error fetching payment status:', error);
     return NextResponse.json(

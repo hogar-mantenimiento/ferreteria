@@ -24,7 +24,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/api/categories') ||
     pathname.startsWith('/api/config') ||
     pathname.startsWith('/api/checkout') ||
-    pathname.startsWith('/api/payment-status')
+    pathname.startsWith('/api/payment-status') ||
+    pathname.startsWith('/api/mercadopago')
   ) {
     return NextResponse.next();
   }
