@@ -16,8 +16,8 @@ interface Ad {
 const ads: Ad[] = [
   {
     id: '1',
-    title: '¡MEGA OFERTA!',
-    description: 'Hasta 40% OFF en herramientas eléctricas. Solo por tiempo limitado.',
+    title: '¡FORMA PARTE DE NUETRO EQUIPO!',
+    description: 'Unite como vendedor preventista y accedé a comisiones competitivas, capacitación continua y el respaldo de una empresa líder.',
     image: '',
     link: '/category/herramientas-electricas',
     backgroundColor: 'bg-gradient-to-r from-red-500 to-red-600',
