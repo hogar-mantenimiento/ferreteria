@@ -4,7 +4,8 @@ import { useConfig } from '@/hooks/useConfig';
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
-  const { config } = useConfig();
+  const { config, loading } = useConfig();
+  const storeName = loading ? 'Cargando...' : config.storeName || '';
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -16,11 +17,11 @@ export default function Footer() {
               {config.logo && (
                 <img
                   src={config.logo}
-                  alt={config.storeName}
+                  alt={config.storeName || 'Logo'}
                   className="h-8 w-8 object-contain"
                 />
               )}
-              <span className="text-xl font-bold">{config.storeName}</span>
+              <span className="text-xl font-bold">{storeName}</span>
             </div>
             <p className="text-gray-400">
               Tu ferretería de confianza con más de 20 años de experiencia 
@@ -138,7 +139,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            © 2024 {config.storeName}. Todos los derechos reservados.
+            © 2024{storeName ? ` ${storeName}.` : ''} Todos los derechos reservados.
           </p>
         </div>
       </div>

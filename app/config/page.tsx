@@ -12,8 +12,8 @@ import toast from 'react-hot-toast';
 export default function ConfigPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const { config, updateConfig } = useConfig();
-  const [storeName, setStoreName] = useState(config.storeName);
+  const { config, updateConfig, loading: configLoading } = useConfig();
+  const [storeName, setStoreName] = useState('');
   const [primaryColor, setPrimaryColor] = useState(config.primaryColor);
   const [secondaryColor, setSecondaryColor] = useState(config.secondaryColor);
   const [accentColor, setAccentColor] = useState(config.accentColor);
@@ -29,6 +29,12 @@ export default function ConfigPage() {
       return;
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    if (!configLoading) {
+      setStoreName(config.storeName);
+    }
+  }, [config.storeName, configLoading]);
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

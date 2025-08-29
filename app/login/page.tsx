@@ -20,7 +20,8 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const { config } = useConfig();
+  const { config, loading: configLoading } = useConfig();
+  const storeName = configLoading ? 'Cargando...' : config.storeName;
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,20 +68,20 @@ export default function LoginPage() {
             className="inline-flex items-center mb-6 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a {config?.storeName ?? 'Inicio'}
+            Volver a {storeName || 'Inicio'}
           </button>
 
           {config?.logo && (
             <img
               className="mx-auto h-16 w-auto mb-6"
               src={config.logo}
-              alt={config?.storeName ?? 'Logo'}
+              alt={storeName || 'Logo'}
             />
           )}
 
           <h2 className="text-3xl font-bold mb-2">Iniciar Sesión</h2>
           <p className="text-gray-700 dark:text-gray-300">
-            Accede a tu cuenta en {config?.storeName ?? 'la tienda'}
+            Accede a tu cuenta en {storeName || 'la tienda'}
           </p>
         </div>
 

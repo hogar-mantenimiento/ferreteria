@@ -10,7 +10,7 @@ interface ConfigContextType {
 }
 
 const defaultConfig: StoreConfig = {
-  storeName: 'Aguante Boca',
+  storeName: '',
   logo: '',
   primaryColor: '#204a87',
   secondaryColor: '#c4a000',

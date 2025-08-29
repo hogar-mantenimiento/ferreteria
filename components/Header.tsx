@@ -22,7 +22,7 @@ import {
 export default function Header() {
   const router = useRouter();
   const { user, logout } = useAuth();
-  const { config } = useConfig();
+  const { config, loading } = useConfig();
   const { getItemCount } = useCart();
   const { theme, setTheme } = useTheme();
 
@@ -115,12 +115,12 @@ export default function Header() {
                 // Mantengo <img> para no requerir domain config de next/image
                 <img
                   src={config.logo}
-                  alt={config?.storeName ?? 'Tienda'}
+                  alt={config.storeName || 'Logo'}
                   className="h-8 w-8 object-contain"
                 />
               )}
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                {config?.storeName ?? 'Mi Tienda'}
+                {loading ? 'Cargando...' : config.storeName || ''}
               </span>
             </button>
           </div>
