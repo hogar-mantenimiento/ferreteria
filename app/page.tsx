@@ -15,6 +15,7 @@ import AdBanner from '@/components/AdBanner';
 import PromotionCard from '@/components/PromotionCard';
 import type { Product, Category } from '@/types';
 import { Menu, Zap, Shield, Truck, CreditCard, Star, TrendingUp } from 'lucide-react';
+import CTAEquipo from '@/components/CTAEquipo';
 
 export default function HomePage() {
   const router = useRouter();
@@ -377,53 +378,43 @@ export default function HomePage() {
         </section>
 
         {/* Newsletter */}
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 text-white transition-colors">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">¡No te pierdas nuestras ofertas!</h2>
-            <p className="text-xl mb-8 text-white/90">
-              Suscríbete a nuestro newsletter y recibe descuentos exclusivos
-            </p>
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
-              <input
-                type="email"
-                placeholder="Tu email"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white/70"
-              />
-              <button
-                onClick={() => router.push('/newsletter')}
-                className="px-8 py-3 rounded-lg font-medium bg-white text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/70"
-              >
-                Suscribirse
-              </button>
-            </div>
-          </div>
-        </section>
+        <section className="py-16 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
+  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-3xl font-bold mb-4">¡No te pierdas nuestras ofertas!</h2>
+    <p className="text-xl mb-8 text-gray-700 dark:text-gray-300">
+      Suscríbete a nuestro newsletter y recibe descuentos exclusivos
+    </p>
+    <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
+      <input
+        type="email"
+        placeholder="Tu email"
+        className="
+          flex-1 px-4 py-3 rounded-lg
+          bg-white dark:bg-gray-800
+          text-gray-900 dark:text-gray-100
+          placeholder-gray-500 dark:placeholder-gray-400
+          focus:outline-none focus:ring-2 focus:ring-indigo-500
+        "
+      />
+      <button
+        onClick={() => router.push('/newsletter')}
+        className="
+        w-full rounded-lg px-3 py-2 text-sm font-medium
+        bg-gray-900 text-gray-50 hover:bg-gray-800
+        dark:bg-slate-100 dark:text-gray-900 dark:hover:bg-slate-200
+        disabled:cursor-not-allowed disabled:opacity-50
+        transition-colors
+        "
+      >
+        Suscribirse
+      </button>
+    </div>
+  </div>
+</section>
+
 
         {/* CTA Vendedor */}
-        <section className="py-16 bg-white dark:bg-gray-800 transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="rounded-2xl p-8 md:p-12 text-white text-center bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                ¿Querés ser parte de nuestro equipo?
-              </h2>
-              <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-                Únete como vendedor preventista y accede a comisiones atractivas,
-                capacitación continua y el respaldo de una empresa líder.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button
-                  onClick={() => router.push('/vendedor')}
-                  className="px-8 py-3 text-lg font-semibold rounded-lg bg-white text-blue-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/70"
-                >
-                  💼 Aplicar Ahora
-                </button>
-                <div className="text-sm text-white/90">
-                  ✅ Sin experiencia requerida • ✅ Capacitación incluida
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+       <CTAEquipo/>
       </main>
 
       <Footer />
