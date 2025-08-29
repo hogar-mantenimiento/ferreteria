@@ -44,7 +44,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
           />
 
           {/* Overlay (debajo) */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/70 via-black/35 to-transparent" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
 
           {/* Contenido (encima) */}
           <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5 text-white">
@@ -63,7 +63,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
                 {category.productCount} productos
               </span>
               <span className="inline-flex items-center gap-1 transition-transform group-hover:translate-x-1 text-white">
-                <span className="underline underline-offset-2 decoration-white/60">
+                <span className="underline underline-offset-2 text-white decoration-white/60">
                   Ver más
                 </span>
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

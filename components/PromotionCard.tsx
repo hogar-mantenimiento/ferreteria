@@ -74,7 +74,7 @@ export default function PromotionCard({ promotion, aspectRatio = '16/9' }: Promo
           aria-label={`Tipo: ${promotion.type}`}
         >
           {getTypeIcon()}
-          <span>{promotion.discount}</span>
+          <span className='text-white'>{promotion.discount}</span>
         </div>
       </div>
 
