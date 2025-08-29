@@ -175,7 +175,7 @@ export default function Header() {
               aria-label="Ver carrito"
             >
               <ShoppingCart className="h-6 w-6" />
-              {itemCount > 0 && (
+              {mounted && itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary-500 text-gray-900 text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
                   {itemCount}
                 </span>
