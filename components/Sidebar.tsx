@@ -70,7 +70,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-3">
-              <ShoppingCart className="h-6 w-6 bg-red-700 text-gray-900 dark:text-white" />
+              <ShoppingCart className="h-6 w-6 text-gray-900 dark:text-white" />
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Compra Rápida
               </h2>
