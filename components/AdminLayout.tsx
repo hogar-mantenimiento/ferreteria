@@ -25,7 +25,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
-  const { config } = useConfig();
+  const { config, loading: configLoading } = useConfig();
   const { theme, setTheme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -57,13 +57,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {config.logo && (
                 <img
                   src={config.logo}
-                  alt={config.storeName}
+                  alt={config.storeName || 'Logo'}
                   className="h-8 w-8 object-contain"
                 />
               )}
               {isSidebarOpen && (
                 <span className="text-lg font-bold text-gray-900 dark:text-white">
-                  {config.storeName}
+                  {configLoading ? 'Cargando...' : config.storeName || ''}
                 </span>
               )}
             </div>

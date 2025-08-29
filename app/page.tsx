@@ -21,7 +21,8 @@ export default function HomePage() {
   const router = useRouter();
   const { user } = useAuth();
   const { addToCart } = useCart();
-  const { config } = useConfig();
+  const { config, loading: configLoading } = useConfig();
+  const storeName = configLoading ? 'Cargando...' : config.storeName;
 
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -134,7 +135,7 @@ export default function HomePage() {
   <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
     <div className="text-center">
       <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
-        Bienvenido a {config?.storeName ?? 'Nuestra Tienda'}
+        Bienvenido a {storeName || 'Nuestra Tienda'}
       </h1>
       <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
         Encuentra todo lo que necesitas para tus proyectos
