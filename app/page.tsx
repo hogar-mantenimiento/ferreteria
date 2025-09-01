@@ -131,41 +131,46 @@ export default function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-white dark:bg-gray-900 transition-colors min-h-screen flex items-center">
-  <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <section
+  className="relative overflow-hidden bg-white dark:bg-gray-900 transition-colors min-h-screen flex items-center bg-cover bg-center"
+  style={{ backgroundImage: "url('/images/fondo.png')" }}
+>
+  {/* Overlay oscuro que cubre toda la vista */}
+  <div className="absolute inset-0 bg-black/60" />
+
+  {/* Contenido */}
+  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
     <div className="text-center">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
-        Bienvenido a {storeName || 'Nuestra Tienda'}
+      <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+        Bienvenido a {storeName || "Nuestra Tienda"}
       </h1>
-      <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+      <p className="text-xl md:text-2xl text-gray-100 max-w-2xl mx-auto">
         Encuentra todo lo que necesitas para tus proyectos
       </p>
 
       {/* Botones */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-        {/* Botón primario */}
         <button
-          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-gray-900 hover:bg-gray-100 
-          dark:border-gray-600 dark:text-white dark:hover:bg-gray-800
+          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-white hover:bg-white/10 
           focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          onClick={() => router.push('/productos')}
+          onClick={() => router.push("/productos")}
         >
           Explorar Productos
         </button>
 
-        {/* Botón secundario */}
         <button
-          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-gray-900 hover:bg-gray-100 
-                     dark:border-gray-600 dark:text-white dark:hover:bg-gray-800
-                     focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          onClick={() => router.push('/ofertas')}
+          className="px-8 py-3 rounded-lg font-medium border border-gray-300 text-white hover:bg-white/10 
+          focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          onClick={() => router.push("/vendedor")}
         >
-          Ver Ofertas
+         Unite a nuestro equipo
         </button>
       </div>
     </div>
   </div>
 </section>
+
+
 
 
 
@@ -380,42 +385,42 @@ export default function HomePage() {
 
         {/* Newsletter */}
         <section className="py-16 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
-  <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 className="text-3xl font-bold mb-4">¡No te pierdas nuestras ofertas!</h2>
-    <p className="text-xl mb-8 text-gray-700 dark:text-gray-300">
-      Suscríbete a nuestro newsletter y recibe descuentos exclusivos
-    </p>
-    <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
-      <input
-        type="email"
-        placeholder="Tu email"
-        className="
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold mb-4">¡No te pierdas nuestras ofertas!</h2>
+            <p className="text-xl mb-8 text-gray-700 dark:text-gray-300">
+              Suscríbete a nuestro newsletter y recibe descuentos exclusivos
+            </p>
+            <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-4">
+              <input
+                type="email"
+                placeholder="Tu email"
+                className="
           flex-1 px-4 py-3 rounded-lg
           bg-white dark:bg-gray-800
           text-gray-900 dark:text-gray-100
           placeholder-gray-500 dark:placeholder-gray-400
           focus:outline-none focus:ring-2 focus:ring-indigo-500
         "
-      />
-      <button
-        onClick={() => router.push('/newsletter')}
-        className="
+              />
+              <button
+                onClick={() => router.push('/newsletter')}
+                className="
         w-full rounded-lg px-3 py-2 text-sm font-medium
         bg-gray-900 text-gray-50 hover:bg-gray-800
         dark:bg-slate-100 dark:text-gray-900 dark:hover:bg-slate-200
         disabled:cursor-not-allowed disabled:opacity-50
         transition-colors
         "
-      >
-        Suscribirse
-      </button>
-    </div>
-  </div>
-</section>
+              >
+                Suscribirse
+              </button>
+            </div>
+          </div>
+        </section>
 
 
         {/* CTA Vendedor */}
-       <CTAEquipo/>
+        <CTAEquipo />
       </main>
 
       <Footer />
