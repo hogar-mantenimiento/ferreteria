@@ -193,77 +193,85 @@ export default function LoginPage() {
       </div>
 
       {/* Columna Derecha: ¿Querés ser vendedor? */}
-      <aside className="
-        border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-800
-        bg-gray-800 dark:bg-gray-950
-        flex
-      ">
-        <div className="mx-auto w-full max-w-xl px-8 py-12 lg:py-0 lg:px-12 flex flex-col justify-center">
-          <div className="
-            rounded-2xl border border-gray-200 dark:border-gray-800
-            bg-gray-50 dark:bg-gray-900/60
-            p-8 shadow-sm
-          ">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-              ¿Querés ser vendedor?
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
-              Sumate a nuestro programa y ofrecé productos de {config?.storeName ?? 'nuestra tienda'}.
-              Ganá comisiones y crecé con capacitación y herramientas.
-            </p>
+      <aside
+  className="
+    relative border-t lg:border-t-0 lg:border-l border-gray-200 dark:border-gray-800
+    flex bg-cover bg-center
+  "
+  style={{ backgroundImage: "url('/images/fondo-login.png')" }}
+>
+  {/* Overlay oscuro */}
+  <div className="absolute inset-0 bg-black/60" />
 
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
-                <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
-                Comisiones competitivas por cada venta
-              </li>
-              <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
-                <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
-                Capacitación y material de venta
-              </li>
-              <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
-                <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
-                Panel para seguimiento de pedidos y clientes
-              </li>
-            </ul>
+  <div className="relative z-10 mx-auto w-full max-w-xl px-8 py-12 lg:py-0 lg:px-12 flex flex-col justify-center">
+    <div
+      className="
+        rounded-2xl border border-gray-200 dark:border-gray-800
+        bg-gray-50/90 dark:bg-gray-900/70
+        p-8 shadow-sm
+      "
+    >
+      <h2 className="text-3xl text-center font-bold text-gray-900 dark:text-white mb-3">
+        ¿Querés ser vendedor?
+      </h2>
+      <p className="text-gray-700 dark:text-gray-300 text-lg mb-6">
+        Sumate a nuestro programa y ofrecé productos de {config?.storeName ?? "nuestra tienda"}.
+        Ganá comisiones y crecé con capacitación y herramientas.
+      </p>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => router.push('/vendedor')}
-                className="
-                w-full sm:w-auto px-6 py-3 rounded-lg text-base font-semibold
-                bg-gray-900 text-gray-50 hover:bg-gray-800
-                dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200
-                focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600
-                disabled:opacity-50 disabled:cursor-not-allowed
-                transition-colors
-                "
-              >
-                Aplicar ahora
-              </button>
+      <ul className="space-y-3 mb-8">
+        <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
+          <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+          Comisiones competitivas por cada venta
+        </li>
+        <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
+          <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+          Capacitación y material de venta
+        </li>
+        <li className="flex items-start gap-3 text-gray-800 dark:text-gray-200">
+          <CheckCircle2 className="h-5 w-5 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+          Panel para seguimiento de pedidos y clientes
+        </li>
+      </ul>
 
-              <button
-                onClick={() => router.push('/vendedor#detalles')}
-                className="
-                  w-full sm:w-auto px-6 py-3 rounded-lg text-base font-medium
-                  bg-white text-gray-900 hover:bg-gray-100
-                  dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900
-                  border border-gray-200 dark:border-gray-700
-                  focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700
-                  transition-colors
-                "
-              >
-                Ver condiciones
-              </button>
-            </div>
+      <div className="flex flex-col justify-center sm:flex-row gap-3">
+        <button
+          onClick={() => router.push("/vendedor")}
+          className="
+            w-full sm:w-auto px-6 py-3 rounded-lg text-base font-semibold
+            bg-gray-900 text-gray-50 hover:bg-gray-800
+            dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200
+            focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600
+            disabled:opacity-50 disabled:cursor-not-allowed
+            transition-colors
+          "
+        >
+          Aplicar ahora
+        </button>
 
-            {/* Info secundaria */}
-            <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
-              No se requiere experiencia previa. Cupos limitados por zona.
-            </p>
-          </div>
-        </div>
-      </aside>
+        <button
+          onClick={() => router.push("/vendedor#detalles")}
+          className="
+            w-full sm:w-auto px-6 py-3 rounded-lg text-base font-medium
+            bg-white text-gray-900 hover:bg-gray-100
+            dark:bg-gray-950 dark:text-gray-100 dark:hover:bg-gray-900
+            border border-gray-200 dark:border-gray-700
+            focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700
+            transition-colors
+          "
+        >
+          Ver condiciones
+        </button>
+      </div>
+
+      {/* Info secundaria */}
+      <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
+        No se requiere experiencia previa. Cupos limitados por zona.
+      </p>
+    </div>
+  </div>
+</aside>
+
     </div>
   );
 }
