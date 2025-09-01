@@ -21,7 +21,7 @@ export default function Footer() {
                   className="h-8 w-8 object-contain"
                 />
               )}
-              <span className="text-xl font-bold">{storeName}</span>
+              <span className="text-xl font-bold text-white">{storeName}</span>
             </div>
             <p className="text-gray-400">
               Tu ferretería de confianza con más de 20 años de experiencia 
