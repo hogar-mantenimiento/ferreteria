@@ -20,7 +20,7 @@ const ads: Ad[] = [
     description: 'Unite como vendedor preventista y accedé a comisiones competitivas, capacitación continua y el respaldo de una empresa líder.',
     image: '',
     link: '/category/herramientas-electricas',
-    backgroundColor: 'bg-gradient-to-r from-red-500 to-red-600',
+    backgroundColor: 'bg-gradient-to-r from-blue-500 to-blue-600',
     textColor: 'text-white'
   },
   {
@@ -29,7 +29,7 @@ const ads: Ad[] = [
     description: 'En compras superiores a $50.000. Válido para todo el país.',
     image: '',
     link: '/shipping',
-    backgroundColor: 'bg-gradient-to-r from-green-500 to-green-600',
+    backgroundColor: 'bg-gradient-to-r from-blue-500 to-blue-600',
     textColor: 'text-white'
   },
   {
